@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripSplit Pro v2.2</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+
+<body data-theme="system">
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-plane-departure"></i>
+                <span>TripSplit Pro</span>
+            </div>
+            <nav>
+                <ul id="main-nav">
+                    <li><a class="nav-link active" data-view="trips"><i class="fas fa-map"></i> My Trips</a></li>
+                    <li><a class="nav-link" data-view="dashboard"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
+                    <li><a class="nav-link" data-view="members"><i class="fas fa-users"></i> Members</a></li>
+                    <li><a class="nav-link" data-view="expenses"><i class="fas fa-receipt"></i> Expenses</a></li>
+                    <li><a class="nav-link" data-view="whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a></li>
+                    <li><a class="nav-link" data-view="settings"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a class="nav-link" data-view="about"><i class="fas fa-info-circle"></i> About</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div id="view-container">
+                <!-- Views will be injected here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="modal-overlay" class="overlay">
+        <div class="card" id="modal-content" style="width: 500px; max-width: 95%;">
+            <!-- Modal content injected here -->
+        </div>
+    </div>
+
+    <script src="static/js/api.js"></script>
+    <script src="static/js/ui.js"></script>
+</body>
+
+</html>
