@@ -1,58 +1,62 @@
 @echo off
+cd /d "%~dp0"
 setlocal enabledelayedexpansion
 
+echo.
 echo ==========================================
-echo TripShare-Pro — Build & Run Locally + Chrome
+echo TripShare-Pro Build and Run
 echo ==========================================
 echo.
 
-REM Check if node_modules exists
-if not exist node_modules (
-    echo Installing dependencies...
-    call npm ci
-    if !ERRORLEVEL! NEQ 0 (
-        echo Failed to install dependencies.
-        pause
-        exit /b 1
-    )
-)
-
-echo.
-echo Building production...
-call npm run build
+REM Step 1: Install dependencies
+echo [1/3] Installing dependencies...
+call npm install
 if !ERRORLEVEL! NEQ 0 (
-    echo Build failed.
+    echo ERROR: npm install failed
     pause
     exit /b 1
 )
 
+REM Step 2: Build
 echo.
-echo Starting local server on http://localhost:5000...
-timeout /t 1
+echo [2/3] Building project...
+call npm run build
+if !ERRORLEVEL! NEQ 0 (
+    echo ERROR: Build failed
+    pause
+    exit /b 1
+)
 
-REM Check if serve is installed globally
-where serve >nul 2>nul
-if %ERRORLEVEL% NEQ 0 (
-    echo Installing 'serve' globally...
+REM Step 3: Start server
+echo.
+echo [3/3] Starting server on http://localhost:5000
+echo Press Ctrl+C to stop the server.
+echo.
+
+REM Install serve if needed
+npm list -g serve >nul 2>&1
+if !ERRORLEVEL! NEQ 0 (
+    echo Installing serve...
     npm install -g serve
 )
 
-REM Try to find Chrome in common locations
-set "chrome_paths=C:\Program Files\Google\Chrome\Application\chrome.exe" "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" "%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe"
-
-for %%G in (%chrome_paths%) do (
-    if exist "%%G" (
-        echo Opening Chrome at http://localhost:5000
-        start "" "%%G" "http://localhost:5000"
-        goto serve
+REM Open Chrome
+for %%G in (
+    "C:\Program Files\Google\Chrome\Application\chrome.exe"
+    "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+    "%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe"
+) do (
+    if exist %%G (
+        start "" %%G "http://localhost:5000"
+        goto run_server
     )
 )
 
-REM If Chrome not found, try default browser
-echo Opening in default browser...
-start http://localhost:5000
+echo.
+echo Open your browser: http://localhost:5000
+echo.
 
-:serve
-REM Serve the dist folder
-serve dist -l 5000
+:run_server
+timeout /t 2
+call serve dist -l 5000
 endlocal
