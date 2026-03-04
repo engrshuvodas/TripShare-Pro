@@ -6,7 +6,7 @@ const Modal = ({ title, isOpen, onClose, children }) => {
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content glass animate-scale-up" onClick={e => e.stopPropagation()}>
+            <div className="modal glass animate-scale-up" onClick={e => e.stopPropagation()}>
                 <div className="modal-header flex-between mb-lg">
                     <h2 className="h4">{title}</h2>
                     <button className="btn-icon" onClick={onClose}><X size={20} /></button>

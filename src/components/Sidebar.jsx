@@ -7,7 +7,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     return (
         <motion.aside
             id="sidebar"
-            className={isOpen ? 'open' : ''}
+            className={`sidebar ${isOpen ? 'open' : ''}`}
             initial={false}
             animate={{ x: isOpen ? 0 : (window.innerWidth <= 1024 ? "-100%" : 0) }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}

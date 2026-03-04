@@ -17,23 +17,26 @@ const Layout = ({ children }) => {
     }, [data.settings.theme]);
 
     return (
-        <div className="app-container">
+        <div className="app-layout">
             <AnimatePresence>
                 {isSidebarOpen && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        id="sidebar-overlay"
-                        className="show"
+                        className={"sidebar-overlay show"}
                         onClick={() => setSidebarOpen(false)}
                     ></motion.div>
                 )}
             </AnimatePresence>
 
-            <header className="mobile-header">
-                <div className="logo h4 font-bold gradient-text">TripSplit Pro</div>
-                <button className="menu-toggle" onClick={() => setSidebarOpen(true)}>☰</button>
+            <header className="top-bar">
+                <div className="px-md flex-between" style={{height: '100%'}}>
+                    <div className="logo h4 font-bold gradient-text">TripSplit Pro</div>
+                    <div className="flex-center gap-sm">
+                        <button className="btn-icon lg-hidden" onClick={() => setSidebarOpen(true)}>☰</button>
+                    </div>
+                </div>
             </header>
 
             <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -44,7 +47,7 @@ const Layout = ({ children }) => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                    className="view-container"
+                    className="view-container p-xl"
                 >
                     {children}
                 </motion.div>
