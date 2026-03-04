@@ -17,9 +17,12 @@
         radial-gradient(at 100% 100%, rgba(244, 114, 182, 0.1) 0px, transparent 50%),
         radial-gradient(at 0% 100%, rgba(251, 146, 60, 0.1) 0px, transparent 50%);
 
+    --gradient-fade: linear-gradient(90deg, rgba(244,63,94,0.08), rgba(251,146,60,0.04));
+
     --glass-bg: rgba(15, 23, 42, 0.7);
     --glass-border: rgba(255, 255, 255, 0.1);
     --glass-inner-glow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.05);
+    --text-main: #e6eef8;
     --text-secondary: #94a3b8;
     --text-muted: #64748b;
 
