@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="system">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripSplit Pro - Expense Splitting for Travel Groups</title>
+    <meta name="description"
+        content="Professional expense splitting app for travel groups. Simple, responsive, and works offline.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="bg-surface text-main">
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <!-- App Wrapper -->
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand p-lg mb-xl">
+                <h1 class="h3 gradient-text">TripSplit Pro ✈️</h1>
+            </div>
+
+            <nav class="nav-pills px-md">
+                <button class="nav-pill active" data-view-target="dashboard">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-pill" data-view-target="members">
+                    <span class="icon">👥</span>
+                    <span>Members</span>
+                </button>
+                <button class="nav-pill" id="add-expense-trigger-sidebar">
+                    <span class="icon">➕</span>
+                    <span>Add Expense</span>
+                </button>
+                <button class="nav-pill" data-view-target="settings">
+                    <span class="icon">⚙️</span>
+                    <span>Settings</span>
+                </button>
+                <button class="nav-pill" id="about-trigger-sidebar">
+                    <span class="icon">ℹ️</span>
+                    <span>About App</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer p-md mt-auto">
+                <div class="profile-mini glass p-sm flex-center gap-md">
+                    <div class="avatar-sm flex-center">👤</div>
+                    <div class="text-sm">
+                        <strong class="block">Traveler</strong>
+                        <span class="text-secondary">Pro Member</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar glass flex-between px-xl py-md">
+                <div class="flex-center gap-md">
+                    <button class="btn-icon lg-hidden" id="sidebar-toggle" title="Menu">
+                        <span class="icon">☰</span>
+                    </button>
+                    <div class="page-title">
+                        <h2 class="h4" id="view-title">Dashboard</h2>
+                    </div>
+                </div>
+                <div class="top-actions flex-center gap-lg">
+                    <button class="btn-icon" id="theme-toggle" title="Toggle Theme">
+                        <span class="icon">🌙</span>
+                    </button>
+                    <div class="relative">
+                        <button class="btn-icon" id="about-trigger">
+                            <span class="icon">ℹ️</span>
+                        </button>
+                        <div id="about-menu" class="dropdown glass hidden animate-in">
+                            <div class="p-lg">
+                                <h3 class="h4 mb-sm">TripSplit Pro</h3>
+                                <p class="text-secondary text-sm mb-md">Version 3.0 (Premium Redesign)</p>
+                                <hr class="mb-md">
+                                <h4 class="text-sm mb-xs">Latest Updates:</h4>
+                                <ul class="text-xs text-secondary mb-md">
+                                    <li>✨ Premium Dark Redesign</li>
+                                    <li>📊 Spending Trend Chart</li>
+                                    <li>📱 Sidebar Navigation</li>
+                                </ul>
+                                <button class="btn-primary w-full text-xs py-sm">Check Updates</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- View Containers -->
+            <div id="app-content" class="p-xl">
+
+                <!-- Loading View -->
+                <div id="view-loading" class="view flex-center animate-pulse">
+                    <div class="h2 gradient-text">Initializing...</div>
+                </div>
+
+                <!-- Trip Creation View -->
+                <div id="view-trip-creation" class="view hidden animate-in">
+                    <div class="card glass max-w-lg mx-auto p-xl">
+                        <h2 class="h3 mb-lg">Create New Trip</h2>
+                        <form id="trip-form">
+                            <div class="form-group mb-md">
+                                <label>Trip Name</label>
+                                <input type="text" id="trip-name" required placeholder="e.g. Goa Diaries">
+                            </div>
+                            <div class="form-group mb-md">
+                                <label>Location</label>
+                                <input type="text" id="trip-location" required placeholder="e.g. Vagator, Goa">
+                            </div>
+                            <div class="flex-row gap-lg mb-md">
+                                <div class="form-group flex-1">
+                                    <label>Start Date</label>
+                                    <input type="date" id="trip-start" required>
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label>End Date</label>
+                                    <input type="date" id="trip-end" required>
+                                </div>
+                            </div>
+                            <div class="members-section mb-xl">
+                                <div class="flex-between mb-sm">
+                                    <label>Select Members</label>
+                                    <button type="button" class="btn-text" id="add-member-trigger">+ New Member</button>
+                                </div>
+                                <div id="member-selection-list" class="member-grid grid-3">
+                                    <!-- Populated by JS -->
+                                </div>
+                                <div id="demo-load-container" class="mt-md hidden">
+                                    <button type="button" class="btn-outline w-full text-xs" id="load-demo-btn">📦 Load
+                                        Demo Members</button>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary w-full py-lg">🚀 Start Trip</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Dashboard View -->
+                <div id="view-dashboard" class="view hidden animate-in">
+                    <!-- Stats Section -->
+                    <div class="flex-col gap-xl">
+                        <div class="grid-2 gap-xl">
+                            <div class="card stat-card float gradient-1 p-xl animate-scale-up">
+                                <span class="text-sm uppercase opacity-80">Total Trip Expense</span>
+                                <h3 class="h1 mt-sm" id="total-trip-cost">₹0</h3>
+                                <div class="mt-md text-xs" id="dashboard-trip-location">---</div>
+                            </div>
+                            <div class="card stat-card float glass p-xl animate-scale-up">
+                                <div class="flex-between">
+                                    <div>
+                                        <span class="text-sm uppercase text-secondary">Per Person Share</span>
+                                        <h3 class="h2 mt-sm" id="per-person-share">₹0</h3>
+                                        <span class="text-xs text-muted mt-xs block">Equal division active</span>
+                                    </div>
+                                    <div class="h3 gradient-text" id="member-count">0</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chart Section -->
+                        <div class="card glass p-xl">
+                            <div class="flex-between mb-xl">
+                                <h3 class="h4">Daily Spending Trend</h3>
+                                <span class="badge text-xs" id="chart-month">March 2026</span>
+                            </div>
+                            <div class="chart-container" id="spending-chart">
+                                <!-- Generated by JS (SVG Bar Chart) -->
+                                <div class="flex-center py-xl text-muted">Calculating trend...</div>
+                            </div>
+                        </div>
+
+                        <!-- Records Section -->
+                        <div class="grid-2 gap-xl items-start">
+                            <div class="expense-records">
+                                <div class="flex-between mb-lg">
+                                    <h3 class="h4">Expense Records</h3>
+                                    <button class="btn-secondary text-xs py-xs px-md" id="add-expense-trigger">Add
+                                        New</button>
+                                </div>
+                                <div id="expense-list" class="flex-col gap-md">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+                            <div class="settlement-summary">
+                                <div class="flex-between mb-lg">
+                                    <h3 class="h4">Settlement Summary</h3>
+                                    <button class="btn-outline text-xs py-xs px-md" id="send-whatsapp-summary">Send
+                                        WhatsApp</button>
+                                </div>
+                                <div id="member-breakdown" class="flex-col gap-sm">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Members Management View -->
+                <div id="view-members" class="view hidden animate-in">
+                    <div class="flex-between mb-xl">
+                        <div>
+                            <h2 class="h3">Trip Members</h2>
+                            <p class="text-secondary text-sm">Manage everyone in this adventure</p>
+                        </div>
+                        <button class="btn-primary" id="add-member-management">+ Add Member</button>
+                    </div>
+                    <div id="members-list" class="grid-3 gap-xl">
+                        <!-- Populated by JS -->
+                    </div>
+                    <div id="members-demo-load" class="mt-xl hidden">
+                        <button class="btn-outline w-full py-md" onclick="UI.handleLoadDemoMembers()">📦 Load Default
+                            Member List</button>
+                    </div>
+                </div>
+
+                <!-- Settings View -->
+                <div id="view-settings" class="view hidden animate-in">
+                    <h2 class="h3 mb-xl">App Settings</h2>
+                    <div class="grid-2 gap-xl">
+                        <div class="card glass p-xl">
+                            <h3 class="h4 mb-lg">Appearance & Localization</h3>
+                            <div class="form-group mb-md">
+                                <label>Theme Preference</label>
+                                <select id="settings-theme">
+                                    <option value="system">Follow System</option>
+                                    <option value="dark">Always Dark</option>
+                                    <option value="light">Always Light</option>
+                                </select>
+                            </div>
+                            <div class="form-group mb-md">
+                                <label>Default Currency</label>
+                                <select id="settings-currency">
+                                    <option value="INR">Indian Rupee (₹)</option>
+                                    <option value="USD">US Dollar ($)</option>
+                                    <option value="EUR">Euro (€)</option>
+                                </select>
+                            </div>
+                            <div class="form-group mb-xl">
+                                <label>Timezone</label>
+                                <select id="settings-timezone">
+                                    <option value="Asia/Kolkata">Asia/Kolkata</option>
+                                    <option value="UTC">UTC</option>
+                                </select>
+                            </div>
+                            <div class="pt-lg border-top">
+                                <h4 class="text-sm mb-sm text-secondary">Demo Support</h4>
+                                <button class="btn-outline w-full text-xs py-sm" onclick="UI.handleLoadDemoMembers()">📦
+                                    Load Default Member List</button>
+                            </div>
+                        </div>
+                        <div class="card glass p-xl">
+                            <h3 class="h4 mb-lg text-danger">Danger Zone</h3>
+                            <p class="text-xs text-secondary mb-md">These actions are permanent and cannot be undone.
+                                Please be careful.</p>
+                            <div class="flex-col gap-sm">
+                                <button class="btn-outline w-full text-xs py-sm"
+                                    style="border-color: var(--danger); color: var(--danger);"
+                                    onclick="UI.handleResetTrip()">🗑️ Delete Current Trip Data</button>
+                                <button class="btn-outline w-full text-xs py-sm" onclick="UI.handleLoadDemoMembers()">📦
+                                    Reset to Demo Members</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="whatsapp-templates">
+                        <div class="flex-between mb-lg">
+                            <h3 class="h4">WhatsApp Templates</h3>
+                            <button class="btn-secondary text-xs py-xs px-md" id="add-template-trigger">+
+                                New</button>
+                        </div>
+                        <div id="templates-list">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </main>
+    </div>
+
+    <!-- Modals & Toasts -->
+    <div id="modal-container" class="modal-overlay hidden">
+        <div class="modal glass animate-scale-up">
+            <div class="modal-header flex-between p-xl border-bottom">
+                <h3 class="h4" id="modal-title">Modal Title</h3>
+                <button class="btn-icon" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-body p-xl" id="modal-body">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
