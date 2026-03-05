@@ -10,6 +10,3 @@ env.bak/
 venv.bak/
 *.db
 .vercel
-
-.vercel
-.env*.local
